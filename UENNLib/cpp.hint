@@ -1,0 +1,2 @@
+#define UENNLIB_API __declspec(dllexport)
+#define UENNLIB_API __declspec(dllimport)
