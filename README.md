@@ -16,7 +16,7 @@ The location to download the library - https://gitlab.com/libeigen/eigen/-/relea
 Once downloaded, place the library under the "Lib" folder.
 
 ---
-**README**
+**READ ME**
 
 It works with almost all markdown flavours (the below blank line matters).
 
