@@ -8,7 +8,7 @@ All source codes are created and tested with Visual Studio 2019 on Windows 11 OS
 
 ## Required Libraries
 
-* Eigen - C++ template library for linear algebra
+> Eigen - C++ template library for linear algebra
 
 \t Eigen 3.4.0 (https://eigen.tuxfamily.org/)
 
