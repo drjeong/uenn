@@ -14,9 +14,7 @@ All source codes are created and tested with Visual Studio 2019 on Windows 11 OS
 
 > The location to download the library - https://gitlab.com/libeigen/eigen/-/releases/3.4.0
 
-```
-Once downloaded, place the library under the "Lib" folder.
-```
+> Once downloaded, place the library under the "Lib" folder.
 
 
 
