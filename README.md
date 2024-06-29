@@ -16,7 +16,7 @@ The location to download the library - https://gitlab.com/libeigen/eigen/-/relea
 Once downloaded, place the library under the "Lib" folder.
 
 ---
-**Eigen**
+**Eigen - C++ template library for linear algebra**
 
 Eigen 3.4.0 (https://eigen.tuxfamily.org/)
 
