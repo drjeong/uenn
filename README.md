@@ -17,4 +17,9 @@ Once downloaded, place the library under the "Lib" folder.
 
 
 
-Pytorch C++ 
+* Pytorch C++ CUDA
+
+The library was tested with libtorch-win-shared-with-deps-2.0.1+cu118.
+
+
+
