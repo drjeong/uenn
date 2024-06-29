@@ -23,5 +23,6 @@ The library was tested with libtorch-win-shared-with-deps-2.0.1+cu118.
 
 The location to download the library - https://pytorch.org/get-started/locally/
 
+Please make sure select the options - LibTorch and C++ / Java.
 
 
