@@ -85,4 +85,6 @@ UENNLIB_API int fnUENN_MNIST_Test(Options option, Eigen::MatrixXd& mat1)
 	enn.evaluatingModel(*train_loader, train_dataset->size().value(), chosenLossFunc);
 
 	enn.evaluatingModel(*test_loader, test_dataset->size().value(), chosenLossFunc);
+
+	return 0;
 }

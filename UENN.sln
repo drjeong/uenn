@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.33214.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TorchENN", "TorchENN\TorchENN.vcxproj", "{DC50CEFF-D089-4135-BA08-4E60F438E8BF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UENN_testbed", "UENN_testbed\UENN_testbed.vcxproj", "{DC50CEFF-D089-4135-BA08-4E60F438E8BF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UENNLib", "UENNLib\UENNLib.vcxproj", "{A3E8DF27-52D7-4D8E-A574-AB8D0BF0A091}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UENN_test", "UENN_test\UENN_test.vcxproj", "{390E11E4-FB32-4B56-A49F-7E63CE7E49A9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UENNLib_test", "UENNLib_test\UENNLib_test.vcxproj", "{390E11E4-FB32-4B56-A49F-7E63CE7E49A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
