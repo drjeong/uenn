@@ -1,6 +1,6 @@
 # Uncertainty Computation using Evidential Deep Learning (Evidential Neural Network)
 
-In the project, three project workspaces are created as 
+In the project, three project workspaces are created as "TorchENN", "UENN_test", and "UENNLib." The project "TorchENN" is a 
 
 ## Implementation Environment
 All source codes are created and tested with Visual Studio 2019 on Windows 11 OS
@@ -26,6 +26,9 @@ All source codes are created and tested with Visual Studio 2019 on Windows 11 OS
 > The location to download the library - https://pytorch.org/get-started/locally/
 
 > Please make sure to select the options - LibTorch and C++ / Java.
+
+> Once downloaded, place the library under the "Lib" folder.
+
 
 
 
