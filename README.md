@@ -18,7 +18,12 @@ Once downloaded, place the library under the "Lib" folder.
 ---
 **Eigen**
 
-It works with almost all markdown flavours (the below blank line matters).
+Eigen 3.4.0 (https://eigen.tuxfamily.org/)
+
+The location to download the library - https://gitlab.com/libeigen/eigen/-/releases/3.4.0
+
+Once downloaded, place the library under the "Lib" folder.
+
 
 ---
 
