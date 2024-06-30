@@ -1,9 +1,13 @@
-# Uncertainty Computation using Evidential Deep Learning (Evidential Neural Network)
+# Uncertainty Computation using Evidential Deep Learning (aka ENN: Evidential Neural Network)
 
-In the project, three project workspaces are created as "TorchENN", "UENN_test", and "UENNLib." The project "TorchENN" is a 
+In the project, three workspaces are created: "UENN_testbed," "UENNLib," and "UENNLib_test." 
+
+UENN_testbed is a stand-alone workspace that runs an ENN that computes various uncertainty computations.
+
+UENNLib creates a DLL (dynamic linking library) to run uncertainty computation with ENN. UENNLib_test is a simple program that tests the created library.
 
 ## Implementation Environment
-All source codes are created and tested with Visual Studio 2019 on Windows 11 OS
+All source codes are created and tested with Visual Studio 2019 on Windows 11 OS.
 
 
 ## Required Libraries
@@ -31,6 +35,11 @@ All source codes are created and tested with Visual Studio 2019 on Windows 11 OS
 
 
 
+## How to use the library
+
+UENNLib creates UENNLib.dll and UENNLib.lib. When using the library, you must place both files into the same folder, where an executable file is located. 
+
+Since the library references Pytorch C++ CUDA library, all necessary DLLs must be placed in the folder as well. 
 
 
 
