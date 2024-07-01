@@ -9,6 +9,7 @@ UENNLib creates a DLL (dynamic linking library) to run uncertainty computation w
 UENNLib_test is a simple program that tests the created library.
 
 ## Implementation Environment
+
 All source codes are created and tested with Visual Studio 2019 on Windows 11 OS.
 
 
@@ -33,10 +34,14 @@ All source codes are created and tested with Visual Studio 2019 on Windows 11 OS
 
 > Please make sure to select the preference options - LibTorch and C++ / Java.
 
-> Once downloaded, place the library under the "Lib" folder.
+> Once downloaded, place the library under the "Lib" folder as:
 
-> For running the program, you must copy DLLs.
->
+> $(SolutionDir)Lib\libtorch-win-shared-with-deps-2.0.1+cu118
+> $(SolutionDir)Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118
+
+> To run the program, you must copy DLLs. 
+
+
 > Release Mode
 
 ```
