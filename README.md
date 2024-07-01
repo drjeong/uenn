@@ -44,8 +44,10 @@ xcopy C:\Lib\libtorch-win-shared-with-deps-2.0.1+cu118\libtorch\lib\*.dll $(Solu
 ```
 
 > Debug Mode
- * xcopy C:\Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
 
+```
+ xcopy C:\Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
+```
 
 ## How to use the library
 
