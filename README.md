@@ -4,7 +4,9 @@ In the project, three workspaces are created: "UENN_testbed," "UENNLib," and "UE
 
 UENN_testbed is a stand-alone workspace that runs an ENN that computes various uncertainty computations.
 
-UENNLib creates a DLL (dynamic linking library) to run uncertainty computation with ENN. UENNLib_test is a simple program that tests the created library.
+UENNLib creates a DLL (dynamic linking library) to run uncertainty computation with ENN. 
+
+UENNLib_test is a simple program that tests the created library.
 
 ## Implementation Environment
 All source codes are created and tested with Visual Studio 2019 on Windows 11 OS.
@@ -33,6 +35,13 @@ All source codes are created and tested with Visual Studio 2019 on Windows 11 OS
 
 > Once downloaded, place the library under the "Lib" folder.
 
+> For running the program, you must copy DLLs.
+>
+> Release Mode
+ * xcopy C:\Lib\libtorch-win-shared-with-deps-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
+
+> Debug Mode
+ * xcopy C:\Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
 
 
 ## How to use the library
