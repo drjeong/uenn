@@ -40,13 +40,13 @@ All source codes are created and tested with Visual Studio 2019 on Windows 11 OS
 > Release Mode
 
 ```
-xcopy C:\Lib\libtorch-win-shared-with-deps-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
+xcopy $(SolutionDir)Lib\libtorch-win-shared-with-deps-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
 ```
 
 > Debug Mode
 
 ```
- xcopy C:\Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
+ xcopy $(SolutionDir)Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
 ```
 
 ## How to use the library
