@@ -12,6 +12,8 @@ UENNLib_test is a simple program that tests the created library.
 
 All source codes are created and tested with Visual Studio 2019 on Windows 11 OS.
 
+It uses C++17 and Windows APIs.
+
 
 ## Required Libraries
 
