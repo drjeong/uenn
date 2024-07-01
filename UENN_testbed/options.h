@@ -59,11 +59,3 @@ struct Options {
 
 	torch::DeviceType device = torch::kCPU;
 };
-
-  //      case ENN_LOSS_DIGAMMA:
-		//	trainENN(epoch, *train_loader, CrossEntropyBayesRisk);
-		//	break;
-		//case ENN_LOSS_LOG:
-		//	trainENN(epoch, *train_loader, MaximumLikelihoodLoss);
-		//	break;
-		//case ENN_LOSS_MSE:

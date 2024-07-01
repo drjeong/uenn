@@ -1,4 +1,3 @@
-// https://nn.labml.ai/uncertainty/evidence/index.html
 
 #pragma once
 #include <torch/torch.h>
@@ -42,21 +41,6 @@ auto kl_divergence(
     return kl;
 }
 
-//auto loglikelihood_loss(torch::Tensor y, torch::Tensor alpha, torch::Device device)
-//{
-//    y = y.to(device);
-//    alpha = alpha.to(device);
-//
-//    torch::Tensor S = alpha.sum(1, true);
-//
-//    torch::Tensor loglikelihood_err = ((y - (alpha / S)).pow(2)).sum(1, true);
-//
-//    torch::Tensor loglikelihood_var = (alpha * (S - alpha) / (S * S * (S + 1))).sum(1, true);
-//
-//    torch::Tensor loglikelihood = loglikelihood_err + loglikelihood_var;
-//
-//    return loglikelihood;
-//}
 
 // Bayes Risk with Squared Error Loss
 auto SquaredErrorBayesRisk = [](

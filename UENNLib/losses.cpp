@@ -11,9 +11,6 @@ torch::Tensor elu_evidence(const torch::Tensor& y)
 	return torch::elu(y) + 1; // minimum value of the ELU function can be -1. It shifts the distribution to positive. 
 }
 
-// https://statproofbook.github.io/P/gam-kl.html
-// torch.lgamma - Computes the natural logarithm of the absolute value of the gamma function on input.
-// alpha: 1000 x 10
 
 torch::Tensor kl_divergence(const torch::Tensor& alpha, size_t num_classes, torch::Device device)
 {

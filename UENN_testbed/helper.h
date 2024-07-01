@@ -3,9 +3,6 @@
  *
  * @brief This file is used to print values in tensor or std::vector to console output.
  *
- * @author Dong Hyun Jeong
- * Contact: djeong@udc.edu
- *
  * 
  */
 

@@ -3,20 +3,6 @@
  *
  * @brief This is the main program source code.
  *
- * @author Dong Hyun Jeong
- * Contact: djeong@udc.edu
- *
- * References: 
- *  USING THE PYTORCH C++ FRONTEND - https://pytorch.org/tutorials/advanced/cpp_frontend.html
- *  Pytorch C++ Frontend Part II - https://learnopencv.com/pytorch-c-frontend-part-ii-inputsweights-and-bias/
- *  Evidential Deep Learning to Quantify Classification Uncertainty - https://nn.labml.ai/uncertainty/evidence/index.html
- * 
- * DLL needs to be copied. 
- * Release Mode
- * xcopy C:\Lib\libtorch-win-shared-with-deps-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
- * 
- * Debug Mode
- * xcopy C:\Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
  */
 
 
