@@ -36,8 +36,11 @@ All source codes are created and tested with Visual Studio 2019 on Windows 11 OS
 
 > Once downloaded, place the library under the "Lib" folder as:
 
+```
 > $(SolutionDir)Lib\libtorch-win-shared-with-deps-2.0.1+cu118
+
 > $(SolutionDir)Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118
+```
 
 > To run the program, you must copy DLLs. 
 
