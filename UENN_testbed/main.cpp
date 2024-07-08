@@ -3,6 +3,13 @@
  *
  * @brief This is the main program source code.
  *
+ * 
+ * DLL needs to be copied. 
+ * Release Mode
+ * xcopy $(SolutionDir)Lib\libtorch-win-shared-with-deps-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
+ * 
+ * Debug Mode
+ * xcopy $(SolutionDir)Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\lib\*.dll $(SolutionDir)$(Platform)\$(Configuration)\ /c /y
  */
 
 
@@ -15,12 +22,8 @@
 #include <vector>
 
 #include "lenet.h"
-//#include "losses.h"
-#include "cnn.h"
+#include "enn.h"
 #include "options.h"
-
-// Where to find the MNIST dataset.
-//const char* kDataRoot = "./mnist";
 
 int main()
 {
@@ -48,17 +51,17 @@ int main()
     options.device = device_type;
     options.n_epochs = kNumberOfEpochs;
 
-    // OPTIMIZER_SGD | OPTIMIZER_ADAM
+    // available option: OPTIMIZER_SGD | OPTIMIZER_ADAM
     options.optimizer = OPTIMIZER_ADAM;
 
-    // ENN - ENN_LOSS_DIGAMMA | ENN_LOSS_LOG | ENN_LOSS_MSE
-	// CNN - CNN_NLL_LOSS | CNN_CROSS_ENTROPY_LOSS
+    // ENN options: ENN_LOSS_DIGAMMA | ENN_LOSS_LOG | ENN_LOSS_MSE
+	// CNN options: CNN_NLL_LOSS | CNN_CROSS_ENTROPY_LOSS
 	options.lossfunctype = ENN_LOSS_DIGAMMA;
 
-    CNNMNIST cnn(options);
-    cnn.trainENN();
+    CENN uenn(options);
+    uenn.trainENN();
 
-    cnn.testENN();
+    uenn.testENN();
 
     return EXIT_SUCCESS;
 }

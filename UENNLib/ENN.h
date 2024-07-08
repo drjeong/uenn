@@ -2,6 +2,7 @@
 #include <torch/torch.h>
 #include <iostream>
 #include <functional>
+//#include <eigen-3.4.0/Dense>
 
 #include "lenet.h"
 #include "losses.h"
@@ -37,7 +38,11 @@ public:
      */
     template <typename DataLoader>
     void evaluatingModel(DataLoader& data_loader, size_t data_size,
-		std::function<torch::Tensor(const torch::Tensor&, const torch::Tensor&, size_t, size_t, size_t, torch::Device)> lossfunc)
+		std::function<torch::Tensor(const torch::Tensor&, const torch::Tensor&, size_t, size_t, size_t, torch::Device)> lossfunc,
+        Eigen::MatrixXd& mat_belief, Eigen::MatrixXd& mat_uncertainty_mass, Eigen::MatrixXd& mat_belief_ent,
+        Eigen::MatrixXd& mat_belief_tot_disagreement, Eigen::MatrixXd& mat_expected_probability_ent,
+        Eigen::MatrixXd& mat_dissonance, Eigen::MatrixXd& mat_vacuity, 
+        Eigen::MatrixXd& mat_labels, Eigen::MatrixXd& mat_matches)
     {
 		size_t num_classes = m_options.n_classes;
 
@@ -64,6 +69,8 @@ public:
         std::vector<torch::Tensor> computed_belief_fail;
         std::vector<torch::Tensor> computed_dissonance;
 		std::vector<torch::Tensor> computed_vacuity;
+		std::vector<torch::Tensor> computed_matches;
+		std::vector<torch::Tensor> target_labels;
 
         int batch_count = 0;
         for (auto& batch : data_loader)
@@ -163,22 +170,42 @@ public:
             //printTensorSize(belief);
             batch_count++;
 
-            computed_belief.push_back(belief);
-            computed_uncertainty_mass.push_back(uncertainty_mass);
-            computed_belief_ent.push_back(belief_ent);
-            computed_belief_tot_disagreement.push_back(belief_tot_disagreement);
-            computed_expected_probability_ent.push_back(expected_probability_ent);
+			//printTensorSize(belief, "belief");
+			//printTensorSize(uncertainty_mass, "uncertainty_mass");
+			//printTensorSize(u_succ, "u_succ");
+			//printTensorSize(u_fail, "u_fail");
+			//printTensorSize(prob_succ, "prob_succ");
+			//printTensorSize(prob_fail, "prob_fail");
+			//printTensorSize(belief_succ, "belief_succ");
+			//printTensorSize(belief_fail, "belief_fail");
+			//printTensorSize(dissonance, "dissonance");
+			//printTensorSize(vacuity, "vacuity");
+			//printTensorSize(belief_tot_disagreement, "belief_tot_disagreement");
+			//printTensorSize(belief_ent, "belief_ent");
+			//printTensorSize(expected_probability, "expected_probability");
+			//printTensorSize(expected_probability_ent, "expected_probability_ent");
+            
+            computed_belief.emplace_back(std::move(belief));
+            computed_uncertainty_mass.emplace_back(std::move(uncertainty_mass));
+            computed_belief_ent.emplace_back(std::move(belief_ent));
+            computed_belief_tot_disagreement.emplace_back(std::move(belief_tot_disagreement));
+            computed_expected_probability_ent.emplace_back(std::move(expected_probability_ent));
 
-            computed_u_succ.push_back(u_succ);
-            computed_u_fail.push_back(u_fail);
-            computed_prob_succ.push_back(prob_succ);
-            computed_prob_fail.push_back(prob_fail);
-            computed_belief_succ.push_back(belief_succ);
-            computed_belief_fail.push_back(belief_fail);
-            computed_dissonance.push_back(dissonance);
-			computed_vacuity.push_back(vacuity);
+            computed_u_succ.emplace_back(std::move(u_succ));
+            computed_u_fail.emplace_back(std::move(u_fail));
+            computed_prob_succ.emplace_back(std::move(prob_succ));
+            computed_prob_fail.emplace_back(std::move(prob_fail));
+            computed_belief_succ.emplace_back(std::move(belief_succ));
+            computed_belief_fail.emplace_back(std::move(belief_fail));
+            computed_dissonance.emplace_back(std::move(dissonance));
+			computed_vacuity.emplace_back(std::move(vacuity));
+
+            computed_matches.emplace_back(std::move(match_bool));
+            target_labels.emplace_back(targets);
 
             avg_loss += loss.template item<float>();
+
+            //if (batch_count > 2) break;   // for debugging purpose only
         }
         //std::cout << std::endl;
 
@@ -189,17 +216,17 @@ public:
         ss << "Loss: " << avg_loss / batch_count;
         ss << " | m(u_succ): " << getMeanValue(computed_u_succ);
         ss << " | m(u_fail): " << getMeanValue(computed_u_fail);
-        ss << " | m(uncertainty): " << getMeanValue(computed_uncertainty_mass);   // 6000 x 1
+        ss << " | m(uncertainty): " << getMeanValue(computed_uncertainty_mass);   // data_size x 1
         ss << " | m(prob_succ): " << getMeanValue(computed_prob_succ);
         ss << " | m(prob_fail): " << getMeanValue(computed_prob_fail);
-        ss << " | m(belief): " << getMeanValue(computed_belief);   // 6000 x 10
+        ss << " | m(belief): " << getMeanValue(computed_belief);   // data_size x # of classes
         ss << " | m(belief_succ): " << getMeanValue(computed_belief_succ);
         ss << " | m(belief_fail): " << getMeanValue(computed_belief_fail);
-        ss << " | m(exp_p_entropy): " << getMeanValue(computed_expected_probability_ent);   // 6000 x 10
-        ss << " | m(dissonance): " << getMeanValue(computed_dissonance);   // 6000 x 1
-		ss << " | m(vacuity): " << getMeanValue(computed_vacuity);   // 6000 x 1
-		ss << " | m(belief entropy): " << getMeanValue(computed_belief_ent);   // 6000
-        ss << " | m(belief total disagreement): " << getMeanValue(computed_belief_tot_disagreement);   // 6000
+        ss << " | m(exp_p_entropy): " << getMeanValue(computed_expected_probability_ent);   // data_size x # of classes
+        ss << " | m(dissonance): " << getMeanValue(computed_dissonance);   // data_size
+		ss << " | m(vacuity): " << getMeanValue(computed_vacuity);   // data_size x 1
+		ss << " | m(belief entropy): " << getMeanValue(computed_belief_ent);   // data_size
+        ss << " | m(belief total disagreement): " << getMeanValue(computed_belief_tot_disagreement);   // data_size
         ss << " | Accuracy: " << static_cast<double>(corrects) / data_size;
 
         outputToFileAndConsole(m_options.logfile_path, ss.str());
@@ -215,6 +242,19 @@ public:
         //    "{} loss: {:.4f} acc: {:.4f}",
         //    epoch_loss, epoch_acc
         //);
+
+        mat_belief = convertTensorVecToEigen(computed_belief, data_size, num_classes);
+		mat_uncertainty_mass = convertTensorVecToEigen(computed_uncertainty_mass, data_size, 1);
+		mat_belief_ent = convertTensorVecToEigen(computed_belief_ent, data_size, 1);
+		mat_belief_tot_disagreement = convertTensorVecToEigen(computed_belief_tot_disagreement, data_size, 1);
+		mat_expected_probability_ent = convertTensorVecToEigen(computed_expected_probability_ent, data_size, 1);
+		mat_dissonance = convertTensorVecToEigen(computed_dissonance, data_size, 1);
+		mat_vacuity = convertTensorVecToEigen(computed_vacuity, data_size, 1);
+		mat_matches = convertTensorVecToEigen(computed_matches, data_size, 1);
+        mat_labels = convertTensorVecToEigen(target_labels, data_size, 1);
+
+		//printEigenMatrix(mat_matches, "mat_matches", 10);
+
     }
 
 	/**

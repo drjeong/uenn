@@ -115,9 +115,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SOLUTIONDIR=R"($(SolutionDir))";_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\include;$(SolutionDir)Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\include\torch\csrc\api\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Lib;$(SolutionDir)Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\include;$(SolutionDir)Lib\libtorch-win-shared-with-deps-debug-2.0.1+cu118\libtorch\include\torch\csrc\api\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -137,9 +137,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SOLUTIONDIR=R"($(SolutionDir))";NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Lib\libtorch-win-shared-with-deps-2.0.1+cu118\libtorch\include;$(SolutionDir)Lib\libtorch-win-shared-with-deps-2.0.1+cu118\libtorch\include\torch\csrc\api\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Lib;$(SolutionDir)Lib\libtorch-win-shared-with-deps-2.0.1+cu118\libtorch\include;$(SolutionDir)Lib\libtorch-win-shared-with-deps-2.0.1+cu118\libtorch\include\torch\csrc\api\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -156,11 +156,11 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cnn.cpp" />
+    <ClCompile Include="enn.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cnn.h" />
+    <ClInclude Include="enn.h" />
     <ClInclude Include="entropy.h" />
     <ClInclude Include="helper.h" />
     <ClInclude Include="lenet.h" />
@@ -168,6 +168,7 @@
     <ClInclude Include="options.h" />
   </ItemGroup>
   <ItemGroup>
+    <Natvis Include="eigen.natvis" />
     <Natvis Include="libtorch.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

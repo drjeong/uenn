@@ -64,27 +64,47 @@ UENNLIB_API int fnUENN_MNIST_Train(Options option)
 
 
 // ENN MNST Training
-UENNLIB_API int fnUENN_MNIST_Test(Options option, Eigen::MatrixXd& mat1)
+UENNLIB_API int fnUENN_MNIST_Test_w_TrainData(Options option)
 {
 	// 0.1307, 0.3081 are the mean and std deviation of the MNIST dataset.
 	auto train_dataset_norm = train_dataset
 		->map(torch::data::transforms::Normalize<>(0.1307, 0.3081))
 		.map(torch::data::transforms::Stack<>());
+
+	auto train_loader = torch::data::make_data_loader<torch::data::samplers::SequentialSampler>(
+		std::move(train_dataset_norm), option.train_batch_size);
+
+	// Determine which loss function to use beforehand
+	auto chosenLossFunc = lossFunc(option.lossfunctype);
+
+	//enn.evaluatingModel(*train_loader, train_dataset->size().value(), chosenLossFunc);
+
+	return 0;
+}
+
+
+// ENN MNST Training
+UENNLIB_API int fnUENN_MNIST_Test_w_TestData(Options option, 
+	Eigen::MatrixXd& mat_belief, Eigen::MatrixXd& mat_uncertainty_mass, Eigen::MatrixXd& mat_belief_ent,
+	Eigen::MatrixXd& mat_belief_tot_disagreement, Eigen::MatrixXd& mat_expected_probability_ent,
+	Eigen::MatrixXd& mat_dissonance, Eigen::MatrixXd& mat_vacuity,
+	Eigen::MatrixXd& mat_labels, Eigen::MatrixXd& mat_matches)
+{
+	// 0.1307, 0.3081 are the mean and std deviation of the MNIST dataset.
 	auto test_dataset_norm = test_dataset
 		->map(torch::data::transforms::Normalize<>(0.1307, 0.3081))
 		.map(torch::data::transforms::Stack<>());
 
-	auto train_loader = torch::data::make_data_loader<torch::data::samplers::SequentialSampler>(
-		std::move(train_dataset_norm), option.train_batch_size);
 	auto test_loader = torch::data::make_data_loader<torch::data::samplers::SequentialSampler>(
 		std::move(test_dataset_norm), option.test_batch_size);
 
 	// Determine which loss function to use beforehand
 	auto chosenLossFunc = lossFunc(option.lossfunctype);
 
-	enn.evaluatingModel(*train_loader, train_dataset->size().value(), chosenLossFunc);
-
-	enn.evaluatingModel(*test_loader, test_dataset->size().value(), chosenLossFunc);
+	enn.evaluatingModel(*test_loader, test_dataset->size().value(), chosenLossFunc,
+		mat_belief, mat_uncertainty_mass, mat_belief_ent, 
+		mat_belief_tot_disagreement, mat_expected_probability_ent,
+		mat_dissonance, mat_vacuity, mat_labels, mat_matches);
 
 	return 0;
 }

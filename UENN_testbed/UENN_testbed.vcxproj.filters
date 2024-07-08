@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cnn.cpp">
+    <ClCompile Include="enn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,7 +29,7 @@
     <ClInclude Include="losses.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cnn.h">
+    <ClInclude Include="enn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="entropy.h">
@@ -44,5 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="libtorch.natvis" />
+    <Natvis Include="eigen.natvis" />
   </ItemGroup>
 </Project>

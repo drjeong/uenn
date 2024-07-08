@@ -16,27 +16,40 @@
 #define CNN_NLL_LOSS            0401 // negative log likelihood loss
 #define CNN_CROSS_ENTROPY_LOSS  0402 // cross entropy loss
 
+const std::string Path_Datasets = "datasets";
+const std::string Path_PreTrainedModels = "pretrained";
 const std::string Dataset_MNIST = "mnist";
 const std::string Dataset_FashionMNIST = "FashionMNIST";
 const std::string MNIST_PreTrainedModel = "lenet_mnist_eval.pt";
-const std::string ROOT = "D:\\WorkSpace2024\\Project_Pytorch\\TorchENN\\";
-const std::string Path_Datasets = "datasets";
-const std::string Path_PreTrainedModels = "pretrained";
 
 struct Options {
-	std::string dataset = Dataset_MNIST;
-	std::string dataset_path = ROOT + Path_Datasets + "\\" + Dataset_MNIST;
-	std::string result_path = ROOT + Path_Datasets + "\\results";
-	std::string logfile_path;
+	
+	// _SOLUTIONDIR is pre-defined as _SOLUTIONDIR=R"($(SolutionDir))";
+	std::string solution_path = _SOLUTIONDIR;
+
+	// default MNIST dataset
+	std::string dataset = Dataset_MNIST; 
+
+	// default MNIST dataset path
+	std::string dataset_path = solution_path + Path_Datasets + "\\" + Dataset_MNIST;	
+
+	// default ENN result path
+	std::string result_path = solution_path + Path_Datasets + "\\results";
+
+	// default log data path
+	std::string logfile_path = "";
 
 	int64_t train_batch_size = 128/*default*/;
 	int64_t test_batch_size = 128/*default*/;
-	int n_epochs = 60;
+	int n_epochs = 10;
 	int n_classes = 10;
 	int n_loginterval = 10;
 	bool use_dropout = true;
 
+	// default optimizer ADAM
 	unsigned long optimizer = OPTIMIZER_ADAM;
+
+	// default LOSS computation
 	unsigned long lossfunctype = ENN_LOSS_DIGAMMA;
 
 	//float gamma = 0.01;

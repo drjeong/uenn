@@ -11,6 +11,7 @@
 #include <torch/torch.h>
 #include <iostream>
 #include <string>
+#include <eigen-3.4.0/Dense>
 
 #define PRINT_VAR_NAME(x) std::cout << #x << ": " << std::endl
 
@@ -142,10 +143,10 @@ void outputToFileAndConsole(const std::string& filename, const std::string& msg)
 }
 
 
-float getMeanValue(std::vector<torch::Tensor> &computed)
+float getMeanValue(std::vector<torch::Tensor> &tensor_vector)
 {
 	// Concatenate tensors along the specified dimension (e.g., dimension 0)
-	torch::Tensor concatenatedTensor = torch::cat(computed, 0);
+	torch::Tensor concatenatedTensor = torch::cat(tensor_vector, 0);
 
 	// Compute the mean value of the concatenated tensor
 	torch::Tensor meanValue = torch::mean(concatenatedTensor);
@@ -210,4 +211,45 @@ std::vector<std::vector<float>> tensorToVector(const torch::Tensor& tensor)
 	}
 
 	return result;
+}
+
+
+/// <summary>
+/// Converting std::vector<torch::Tensor> to Eigen::MatrixXd.
+/// </summary>
+/// <param name="tensor"></param>
+/// <returns></returns>
+inline Eigen::MatrixXd convertTensorVecToEigen(const std::vector<torch::Tensor>& tensor_vector,
+	size_t dataset_size, size_t num_classes) {
+	// Assuming all tensors are of the same size and are 1D
+	if (tensor_vector.empty()) return Eigen::MatrixXd();
+
+	try {
+		// Concatenate tensors along the specified dimension (e.g., dimension 0)
+		torch::Tensor concatenatedTensor = torch::cat(tensor_vector, 0);
+
+		// Reshape the tensor to data_size x num_class
+		// Ensure the tensor is on CPU
+		auto reshaped_tensor = concatenatedTensor.reshape({ (long)dataset_size, (long)num_classes }).to(torch::kCPU, torch::kDouble);
+
+		// Ensure tensor is contiguous and on CPU
+		if (!reshaped_tensor.is_contiguous()) {
+			reshaped_tensor = reshaped_tensor.contiguous();
+		}
+
+		// Map the tensor data to Eigen::MatrixXd
+		Eigen::Map<Eigen::MatrixXd> eigen_matrix(reshaped_tensor.data_ptr<double>(), 
+			reshaped_tensor.size(0), reshaped_tensor.size(1));
+
+		//// Print some matrix info to confirm
+		//std::cout << "Eigen Matrix Rows: " << eigen_matrix.rows() << ", Columns: " << eigen_matrix.cols() << std::endl;
+		//std::cout << "First element: " << eigen_matrix(0, 0) << std::endl;
+
+		return eigen_matrix;
+	}
+	catch (const c10::Error& err) {
+		std::cerr << "Error caught: " << err.what() << std::endl;
+	}
+
+	return Eigen::MatrixXd();
 }
