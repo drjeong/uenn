@@ -37,7 +37,7 @@ public:
 	 * lossfunc: user defined loss function
 	 */
 	template <typename DataLoader>
-	void evaluatingModel(DataLoader& data_loader, size_t data_size,
+	void testingModel(DataLoader& data_loader, size_t data_size,
 		std::function<torch::Tensor(const torch::Tensor&, const torch::Tensor&, size_t, size_t, size_t, torch::Device)> lossfunc,
 		Eigen::MatrixXd& mat_belief, Eigen::MatrixXd& mat_evidence, Eigen::MatrixXd& mat_strength,
 		Eigen::MatrixXd& mat_uncertainty_mass, Eigen::MatrixXd& mat_belief_ent,
