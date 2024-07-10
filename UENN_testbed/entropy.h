@@ -159,16 +159,9 @@ torch::Tensor information_gain(torch::Tensor belief, torch::Tensor true_labels, 
 }
 
 // Calculate dissonance of a vector of alpha #
-torch::Tensor getDisn(torch::Tensor alpha) {
-	// Calculate evidence and sum of alpha along rows
-	torch::Tensor evi = alpha - 1;
-	torch::Tensor s = torch::sum(alpha, /*dim=*/1, /*keepdim=*/true);
-
-	// Calculate belief
-	torch::Tensor blf = evi / s;
-
-	// Initialize diss tensor
-	torch::Tensor diss = torch::zeros_like(blf.select(1, 0)); // Initialize diss tensor
+torch::Tensor getDisn(torch::Tensor& alpha, torch::Tensor& evidence, torch::Tensor& strength, torch::Tensor& belief) {
+	// Initialize dissonance tensor
+	torch::Tensor dissonance = torch::zeros_like(belief.select(1, 0)); // Initialize dissonance tensor
 
 	// Calculate balance function
 	auto Bal = [](torch::Tensor bi, torch::Tensor bj) {
@@ -178,18 +171,18 @@ torch::Tensor getDisn(torch::Tensor alpha) {
 	// Calculate relative mass balance for other columns
 	torch::Tensor classes = torch::arange(alpha.size(1));
 	for (int i = 0; i < classes.size(0); ++i) {
-		torch::Tensor score_j_bal_sum = torch::zeros_like(blf.select(1, 0)); // Initialize sum of score_j_bal
-		torch::Tensor score_j_sum = torch::zeros_like(blf.select(1, 0)); // Initialize sum of score_j
+		torch::Tensor score_j_bal_sum = torch::zeros_like(belief.select(1, 0)); // Initialize sum of score_j_bal
+		torch::Tensor score_j_sum = torch::zeros_like(belief.select(1, 0)); // Initialize sum of score_j
 		for (int j = 0; j < classes.size(0); ++j) {
 			if (j != i) {
-				score_j_bal_sum += blf.select(1, j) * Bal(blf.select(1, j), blf.select(1, i));
-				score_j_sum += blf.select(1, j);
+				score_j_bal_sum += belief.select(1, j) * Bal(belief.select(1, j), belief.select(1, i));
+				score_j_sum += belief.select(1, j);
 			}
 		}
-		diss += blf.select(1, i) * (score_j_bal_sum / (score_j_sum + 1e-8));
+		dissonance += belief.select(1, i) * (score_j_bal_sum / (score_j_sum + 1e-8));
 	}
 
-	return diss;
+	return dissonance;
 }
 
 // Function to compute the entropy of a tensor x

@@ -299,13 +299,16 @@ void CENN::trainENN(size_t epoch, DataLoader& data_loader,
         auto acc = torch::mean(match);
 		auto evidence = relu_evidence(output);
 		//auto evidence = elu_evidence(output); // when using elu, output must be positive values.
+		//printTensor(evidence);
 
         // alpha size: batch size x # of classes
         auto alpha = evidence + 1;
+		//printTensor(alpha);
 
         // strength size: batch size x 1
         auto strength /*alpha_sum*/ = torch::sum(alpha, /*dim=*/1, /*keepdim=*/true);
-        
+		//printTensor(strength);
+
         // uncertainty_mass size: batch size x 1
         auto uncertainty_mass = static_cast<float>(num_classes) / strength; 
 		auto u_succ = uncertainty_mass.masked_select(match_bool);    // Track u for correct predictions
@@ -314,6 +317,7 @@ void CENN::trainENN(size_t epoch, DataLoader& data_loader,
         // vacuity
         // Note: Vacuity might not be correct because of incorrect when using OOD samples. 
         auto vacuity = ((int)num_classes) / strength;	// Calculate vacuity
+        //printTensor(vacuity);
 
         // expected_probability size: batch size x # of classes
         auto expected_probability = alpha / strength;
@@ -343,7 +347,7 @@ void CENN::trainENN(size_t epoch, DataLoader& data_loader,
 		auto belief_succ = belief_max.masked_select(match_bool); // Track belief for correct predictions
 		auto belief_fail = belief_max.masked_select(~match_bool); // Track belief for incorrect predictions
 
-        auto dissonance = getDisn(alpha);
+        auto dissonance = getDisn(alpha, evidence, strength, belief);
 		//printTensor(dissonance);
 
 		auto belief_ent = shannon_entropy(belief);
@@ -430,8 +434,7 @@ void CENN::trainENN(size_t epoch, DataLoader& data_loader,
     //    epoch_loss, epoch_acc
     //);
 
-	Eigen::MatrixXd mat_belief = convertTensorVecToEigen(computed_belief, train_dataset_size, num_classes);
-
+	//Eigen::MatrixXd mat_belief = convertTensorVecToEigen(computed_belief, train_dataset_size, num_classes);
 }
 
 

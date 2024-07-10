@@ -45,7 +45,7 @@ int main()
 #endif
     
 	// The number of epochs to train.
-	const int64_t kNumberOfEpochs = 10;
+	const int64_t kNumberOfEpochs = 2;
 
 	Options options;
     options.device = device_type;

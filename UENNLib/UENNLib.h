@@ -18,7 +18,8 @@
 UENNLIB_API int fnUENN_MNIST_Train(Options option);
 UENNLIB_API int fnUENN_MNIST_Test_w_TrainData(Options option);
 UENNLIB_API int fnUENN_MNIST_Test_w_TestData(Options option,
-	Eigen::MatrixXd& mat_belief, Eigen::MatrixXd& mat_uncertainty_mass, Eigen::MatrixXd& mat_belief_ent,
+	Eigen::MatrixXd& mat_belief, Eigen::MatrixXd& mat_evidence, Eigen::MatrixXd& mat_strength, 
+	Eigen::MatrixXd& mat_uncertainty_mass, Eigen::MatrixXd& mat_belief_ent,
 	Eigen::MatrixXd& mat_belief_tot_disagreement, Eigen::MatrixXd& mat_expected_probability_ent,
 	Eigen::MatrixXd& mat_dissonance, Eigen::MatrixXd& mat_vacuity, 
 	Eigen::MatrixXd& mat_labels, Eigen::MatrixXd& mat_match);

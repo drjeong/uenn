@@ -64,22 +64,22 @@ inline void printTensor(const torch::Tensor& tensor)
 	torch::Tensor cpuTensor = tensor.cpu();
 	torch::Tensor floatTensor = cpuTensor.to(torch::kFloat32);
 
-	printTensorSize(tensor);
+	printTensorSize(floatTensor);
 
-	if (tensor.dim() == 0) {
+	if (floatTensor.dim() == 0) {
 		// Scalar Tensor
-		std::cout << tensor.item<float>() << std::endl;
+		std::cout << floatTensor.item<float>() << std::endl;
 	}
-	else if (tensor.dim() == 1) {
-		for (int i = 0; i < tensor.size(0); ++i) {
-			std::vector<float> row_vector = { tensor[i].item<float>() }; // create one-element vector
+	else if (floatTensor.dim() == 1) {
+		for (int i = 0; i < floatTensor.size(0); ++i) {
+			std::vector<float> row_vector = { floatTensor[i].item<float>() }; // create one-element vector
 			printVector(row_vector);
 		}
 	}
 	else {
 		// Convert each row of the tensor into a vector of floats
-		for (int i = 0; i < tensor.size(0); ++i) {
-			std::vector<float> row_vector(tensor[i].data_ptr<float>(), tensor[i].data_ptr<float>() + tensor[i].size(0));
+		for (int i = 0; i < floatTensor.size(0); ++i) {
+			std::vector<float> row_vector(floatTensor[i].data_ptr<float>(), floatTensor[i].data_ptr<float>() + floatTensor[i].size(0));
 			printVector(row_vector);
 		}
 	}
@@ -218,8 +218,7 @@ inline std::vector<std::vector<float>> tensorToVector(const torch::Tensor& tenso
 /// </summary>
 /// <param name="tensor"></param>
 /// <returns></returns>
-inline Eigen::MatrixXd convertTensorVecToEigen(const std::vector<torch::Tensor>& tensor_vector,
-	size_t dataset_size, size_t num_classes) {
+inline Eigen::MatrixXd convert2DTensorVecToEigen(const std::vector<torch::Tensor>& tensor_vector) {
 	// Assuming all tensors are of the same size and are 1D
 	if (tensor_vector.empty()) return Eigen::MatrixXd();
 
@@ -227,9 +226,60 @@ inline Eigen::MatrixXd convertTensorVecToEigen(const std::vector<torch::Tensor>&
 		// Concatenate tensors along the specified dimension (e.g., dimension 0)
 		torch::Tensor concatenatedTensor = torch::cat(tensor_vector, 0);
 
+		// Convert to CPU tensor
+		auto cpuTensor = concatenatedTensor.to(torch::kCPU, torch::kDouble);
+
+		// Ensure tensor is contiguous and on CPU
+		if (!cpuTensor.is_contiguous()) {
+			cpuTensor = cpuTensor.contiguous();
+		}
+
+		// Get dimensions
+		int rows = cpuTensor.size(0);
+		int cols = cpuTensor.size(1);
+
+		// Allocate an Eigen matrix
+		Eigen::MatrixXd eigen_matrix(rows, cols);
+
+		// Copy data from Tensor to Eigen matrix
+		auto data_ptr = cpuTensor.data_ptr<double>();
+		for (int i = 0; i < rows; ++i) {
+			for (int j = 0; j < cols; ++j) {
+				eigen_matrix(i, j) = data_ptr[i * cols + j]; // Access elements in row-major order
+			}
+		}
+
+		// Map the tensor data to Eigen::MatrixXd (Causing an alignment issue in 2D)
+		//Eigen::Map<Eigen::MatrixXd> eigen_matrix(cpuTensor.data_ptr<double>(), cpuTensor.size(0), cpuTensor.size(1));
+
+		return eigen_matrix;
+	}
+	catch (const c10::Error& err) {
+		std::cerr << "Error caught: " << err.what() << std::endl;
+	}
+
+	return Eigen::MatrixXd();
+}
+
+
+/// <summary>
+/// Converting std::vector<torch::Tensor> to Eigen::MatrixXd.
+/// </summary>
+/// <param name="tensor"></param>
+/// <returns></returns>
+inline Eigen::MatrixXd convert1DTensorVecToEigen(const std::vector<torch::Tensor>& tensor_vector) {
+	// Assuming all tensors are of the same size and are 1D
+	if (tensor_vector.empty()) return Eigen::MatrixXd();
+
+	try {
+		// Concatenate tensors along the specified dimension (e.g., dimension 0)
+		torch::Tensor concatenatedTensor = torch::cat(tensor_vector, 0);
+
+		int rows = concatenatedTensor.size(0);
+
 		// Reshape the tensor to data_size x num_class
 		// Ensure the tensor is on CPU
-		auto reshaped_tensor = concatenatedTensor.reshape({ (long)dataset_size, (long)num_classes }).to(torch::kCPU, torch::kDouble);
+		auto reshaped_tensor = concatenatedTensor.reshape({ (long)rows, (long)1 }).to(torch::kCPU, torch::kDouble);
 
 		// Ensure tensor is contiguous and on CPU
 		if (!reshaped_tensor.is_contiguous()) {

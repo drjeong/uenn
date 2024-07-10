@@ -39,7 +39,8 @@ public:
     template <typename DataLoader>
     void evaluatingModel(DataLoader& data_loader, size_t data_size,
 		std::function<torch::Tensor(const torch::Tensor&, const torch::Tensor&, size_t, size_t, size_t, torch::Device)> lossfunc,
-        Eigen::MatrixXd& mat_belief, Eigen::MatrixXd& mat_uncertainty_mass, Eigen::MatrixXd& mat_belief_ent,
+        Eigen::MatrixXd& mat_belief, Eigen::MatrixXd& mat_evidence, Eigen::MatrixXd& mat_strength,
+        Eigen::MatrixXd& mat_uncertainty_mass, Eigen::MatrixXd& mat_belief_ent,
         Eigen::MatrixXd& mat_belief_tot_disagreement, Eigen::MatrixXd& mat_expected_probability_ent,
         Eigen::MatrixXd& mat_dissonance, Eigen::MatrixXd& mat_vacuity, 
         Eigen::MatrixXd& mat_labels, Eigen::MatrixXd& mat_matches)
@@ -56,7 +57,9 @@ public:
         int64_t corrects = 0;
         float avg_loss = 0;
 
-        std::vector<torch::Tensor> computed_belief;
+		std::vector<torch::Tensor> computed_belief;
+		std::vector<torch::Tensor> computed_evidence;
+		std::vector<torch::Tensor> computed_strength;
         std::vector<torch::Tensor> computed_uncertainty_mass;
         std::vector<torch::Tensor> computed_belief_ent;
         std::vector<torch::Tensor> computed_belief_tot_disagreement;
@@ -100,12 +103,15 @@ public:
             auto acc = torch::mean(match);
             auto evidence = relu_evidence(output);
             //auto evidence = elu_evidence(output);
+            //printTensor(evidence);
 
             // alpha size: batch size x # of classes
             auto alpha = evidence + 1;
+            //printTensor(alpha);
 
             // strength size: batch size x 1
             auto strength /*alpha_sum*/ = torch::sum(alpha, /*dim=*/1, /*keepdim=*/true);
+            //printTensor(strength);
 
             // uncertainty_mass size: batch size x 1
             auto uncertainty_mass = static_cast<float>(num_classes) / strength;
@@ -135,6 +141,7 @@ public:
 
             // belief mass
             auto belief = evidence / strength;
+			//printTensor(belief);
 
             // Expected belief mass of the selected (greedy highset probability) class
             torch::Tensor belief_max;
@@ -143,7 +150,8 @@ public:
             auto belief_succ = belief_max.masked_select(match_bool); // Track belief for correct predictions
             auto belief_fail = belief_max.masked_select(~match_bool); // Track belief for incorrect predictions
 
-            auto dissonance = getDisn(alpha);
+            //auto dissonance = getDisn(alpha);
+			auto dissonance = getDisn(alpha, evidence, strength, belief);
             //printTensor(dissonance);
 
             auto belief_ent = shannon_entropy(belief);
@@ -186,6 +194,9 @@ public:
 			//printTensorSize(expected_probability_ent, "expected_probability_ent");
             
             computed_belief.emplace_back(std::move(belief));
+            computed_evidence.emplace_back(std::move(evidence));
+            computed_strength.emplace_back(std::move(strength));
+            
             computed_uncertainty_mass.emplace_back(std::move(uncertainty_mass));
             computed_belief_ent.emplace_back(std::move(belief_ent));
             computed_belief_tot_disagreement.emplace_back(std::move(belief_tot_disagreement));
@@ -243,15 +254,17 @@ public:
         //    epoch_loss, epoch_acc
         //);
 
-        mat_belief = convertTensorVecToEigen(computed_belief, data_size, num_classes);
-		mat_uncertainty_mass = convertTensorVecToEigen(computed_uncertainty_mass, data_size, 1);
-		mat_belief_ent = convertTensorVecToEigen(computed_belief_ent, data_size, 1);
-		mat_belief_tot_disagreement = convertTensorVecToEigen(computed_belief_tot_disagreement, data_size, 1);
-		mat_expected_probability_ent = convertTensorVecToEigen(computed_expected_probability_ent, data_size, 1);
-		mat_dissonance = convertTensorVecToEigen(computed_dissonance, data_size, 1);
-		mat_vacuity = convertTensorVecToEigen(computed_vacuity, data_size, 1);
-		mat_matches = convertTensorVecToEigen(computed_matches, data_size, 1);
-        mat_labels = convertTensorVecToEigen(target_labels, data_size, 1);
+		mat_belief = convert2DTensorVecToEigen(computed_belief);
+		mat_evidence = convert2DTensorVecToEigen(computed_evidence);
+		mat_strength = convert1DTensorVecToEigen(computed_strength);
+		mat_uncertainty_mass = convert1DTensorVecToEigen(computed_uncertainty_mass);
+		mat_belief_ent = convert1DTensorVecToEigen(computed_belief_ent);
+		mat_belief_tot_disagreement = convert1DTensorVecToEigen(computed_belief_tot_disagreement);
+		mat_expected_probability_ent = convert1DTensorVecToEigen(computed_expected_probability_ent);
+		mat_dissonance = convert1DTensorVecToEigen(computed_dissonance);
+		mat_vacuity = convert1DTensorVecToEigen(computed_vacuity);
+		mat_matches = convert1DTensorVecToEigen(computed_matches);
+        mat_labels = convert1DTensorVecToEigen(target_labels);
 
 		//printEigenMatrix(mat_matches, "mat_matches", 10);
 

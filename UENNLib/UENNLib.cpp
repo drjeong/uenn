@@ -85,7 +85,8 @@ UENNLIB_API int fnUENN_MNIST_Test_w_TrainData(Options option)
 
 // ENN MNST Training
 UENNLIB_API int fnUENN_MNIST_Test_w_TestData(Options option, 
-	Eigen::MatrixXd& mat_belief, Eigen::MatrixXd& mat_uncertainty_mass, Eigen::MatrixXd& mat_belief_ent,
+	Eigen::MatrixXd& mat_belief, Eigen::MatrixXd& mat_evidence, Eigen::MatrixXd& mat_strength, 
+	Eigen::MatrixXd& mat_uncertainty_mass, Eigen::MatrixXd& mat_belief_ent,
 	Eigen::MatrixXd& mat_belief_tot_disagreement, Eigen::MatrixXd& mat_expected_probability_ent,
 	Eigen::MatrixXd& mat_dissonance, Eigen::MatrixXd& mat_vacuity,
 	Eigen::MatrixXd& mat_labels, Eigen::MatrixXd& mat_matches)
@@ -102,7 +103,8 @@ UENNLIB_API int fnUENN_MNIST_Test_w_TestData(Options option,
 	auto chosenLossFunc = lossFunc(option.lossfunctype);
 
 	enn.evaluatingModel(*test_loader, test_dataset->size().value(), chosenLossFunc,
-		mat_belief, mat_uncertainty_mass, mat_belief_ent, 
+		mat_belief, mat_evidence, mat_strength,
+		mat_uncertainty_mass, mat_belief_ent, 
 		mat_belief_tot_disagreement, mat_expected_probability_ent,
 		mat_dissonance, mat_vacuity, mat_labels, mat_matches);
 

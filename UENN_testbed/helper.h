@@ -41,20 +41,20 @@ void printTensor(const torch::Tensor& tensor)
 
 	printTensorSize(tensor);
 
-	if (tensor.dim() == 0) {
+	if (floatTensor.dim() == 0) {
 		// Scalar Tensor
-		std::cout << tensor.item<float>() << std::endl;
+		std::cout << floatTensor.item<float>() << std::endl;
 	}
-	else if (tensor.dim() == 1) {
-		for (int i = 0; i < tensor.size(0); ++i) {
-			std::vector<float> row_vector = { tensor[i].item<float>() }; // create one-element vector
+	else if (floatTensor.dim() == 1) {
+		for (int i = 0; i < floatTensor.size(0); ++i) {
+			std::vector<float> row_vector = { floatTensor[i].item<float>() }; // create one-element vector
 			printVector(row_vector);
 		}
 	}
 	else {
 		// Convert each row of the tensor into a vector of floats
-		for (int i = 0; i < tensor.size(0); ++i) {
-			std::vector<float> row_vector(tensor[i].data_ptr<float>(), tensor[i].data_ptr<float>() + tensor[i].size(0));
+		for (int i = 0; i < floatTensor.size(0); ++i) {
+			std::vector<float> row_vector(floatTensor[i].data_ptr<float>(), floatTensor[i].data_ptr<float>() + floatTensor[i].size(0));
 			printVector(row_vector);
 		}
 	}

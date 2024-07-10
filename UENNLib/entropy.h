@@ -196,6 +196,34 @@ inline torch::Tensor getDisn(torch::Tensor alpha) {
 	return diss;
 }
 
+
+// Calculate dissonance of a vector of alpha #
+inline torch::Tensor getDisn(torch::Tensor& alpha, torch::Tensor& evidence, torch::Tensor& strength, torch::Tensor& belief) {
+	// Initialize dissonance tensor
+	torch::Tensor dissonance = torch::zeros_like(belief.select(1, 0)); // Initialize dissonance tensor
+
+	// Calculate balance function
+	auto Bal = [](torch::Tensor bi, torch::Tensor bj) {
+		return 1 - torch::abs(bi - bj) / (bi + bj + 1e-8);
+	};
+
+	// Calculate relative mass balance for other columns
+	torch::Tensor classes = torch::arange(alpha.size(1));
+	for (int i = 0; i < classes.size(0); ++i) {
+		torch::Tensor score_j_bal_sum = torch::zeros_like(belief.select(1, 0)); // Initialize sum of score_j_bal
+		torch::Tensor score_j_sum = torch::zeros_like(belief.select(1, 0)); // Initialize sum of score_j
+		for (int j = 0; j < classes.size(0); ++j) {
+			if (j != i) {
+				score_j_bal_sum += belief.select(1, j) * Bal(belief.select(1, j), belief.select(1, i));
+				score_j_sum += belief.select(1, j);
+			}
+		}
+		dissonance += belief.select(1, i) * (score_j_bal_sum / (score_j_sum + 1e-8));
+	}
+
+	return dissonance;
+}
+
 // Function to compute the entropy of a tensor x
 inline torch::Tensor entropy(const torch::Tensor& x) {
 	return -torch::sum(x * torch::log(x));
