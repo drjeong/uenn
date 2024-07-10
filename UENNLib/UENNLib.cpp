@@ -17,8 +17,9 @@ int LoadMNISTDataset(Options option)
 		train_dataset = std::make_unique<torch::data::datasets::MNIST>(option.dataset_path, torch::data::datasets::MNIST::Mode::kTrain);
 	}
 	catch (const std::exception& e) {
-		std::cerr << "Error initializing m_train_dataset: " << e.what() << std::endl;
+		std::cerr << "Error initializing dataset: " << e.what() << std::endl;
 		// Handle the error appropriately
+		return -1;
 	}
 
 	try {

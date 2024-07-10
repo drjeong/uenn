@@ -25,7 +25,7 @@ int main()
 	// LOSSFUNCTYPE: ENN_LOSS_DIGAMMA | ENN_LOSS_LOG | ENN_LOSS_MSE
 	option.lossfunctype = ENN_LOSS_DIGAMMA;
 
-	const std::string DATA_PATH = "D:\\WorkSpace2024\\Project_Pytorch\\TorchENN\\UENN_Original\\datasets";
+	const std::string DATA_PATH = "C:\\WorkSpace2024\\Project_Pytorch\\TorchENN\\UENN_Original\\datasets";
 
 	option.dataset_path = DATA_PATH + "\\mnist";
 	option.result_path = DATA_PATH + "\\results";
