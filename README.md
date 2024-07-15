@@ -68,4 +68,7 @@ UENNLib creates UENNLib.dll and UENNLib.lib. When using the library, you must pl
 Since the library references Pytorch C++ CUDA library, all necessary DLLs must be placed in the folder as well. 
 
 
+## Datasets
+
+Currently the library only supports running MNIST dataset. 
 
