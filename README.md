@@ -72,3 +72,6 @@ Since the library references Pytorch C++ CUDA library, all necessary DLLs must b
 
 Currently the library only supports running MNIST dataset. 
 
+## Acknowledgement
+
+This material is based upon work supported by the National Science Foundation (Grant No. 2107451). 
