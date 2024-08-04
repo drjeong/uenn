@@ -1,4 +1,4 @@
-# Computing Various Uncertainty-related Attributes using Evidential Deep Learning (aka ENN: Evidential Neural Network)
+# Computing Various Uncertainty-related Attributes using Evidential Deep Learning (aka ENN: Evidential Neural Network) using C++
 
 In the project, three workspaces are created: "UENN_testbed," "UENNLib," and "UENNLib_test." 
 
